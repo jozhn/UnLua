@@ -31,6 +31,7 @@ public class UnLua : ModuleRules
         bEnforceIWYU = false;
 #endif
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        OptimizeCode = CodeOptimization.InShippingBuildsOnly;
 
         PublicIncludePaths.AddRange(
             new string[]
