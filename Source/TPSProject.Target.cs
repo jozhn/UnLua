@@ -1,6 +1,6 @@
 // Tencent is pleased to support the open source community by making UnLua available.
 // 
-// Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+// Copyright (C) 2019 Tencent. All rights reserved.
 //
 // Licensed under the MIT License (the "License"); 
 // you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,17 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class TPSProjectTarget : TargetRules{    public TPSProjectTarget(TargetInfo Target) : base(Target)    {        Type = TargetType.Game;
+public class TPSProjectTarget : TargetRules
+{
+    public TPSProjectTarget(TargetInfo Target) : base(Target)
+    {
+        Type = TargetType.Game;
         DefaultBuildSettings = BuildSettingsVersion.V2;
-        ExtraModuleNames.AddRange(            new string[]            {
+        ExtraModuleNames.AddRange(
+            new string[]
+            {
                 "TPSProject"
-            }            );    }}
+            }
+            );
+    }
+}

@@ -1,6 +1,6 @@
 // Tencent is pleased to support the open source community by making UnLua available.
 // 
-// Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+// Copyright (C) 2019 Tencent. All rights reserved.
 //
 // Licensed under the MIT License (the "License"); 
 // you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -41,7 +41,7 @@ void SUnLuaAboutScreen::Construct(const FArguments& InArgs)
 #endif
     AboutLines.Add(MakeShareable(new FLineDefinition(LOCTEXT("Copyright1", "https://github.com/Tencent/UnLua"), 8, FLinearColor(1.f, 1.f, 1.f), FMargin(0.f))));
     AboutLines.Add(MakeShareable(new FLineDefinition(LOCTEXT("Copyright2", "Tencent is pleased to support the open source community by making UnLua available."), 8, FLinearColor(1.f, 1.f, 1.f), FMargin(0.0f, 8.0f))));
-    AboutLines.Add(MakeShareable(new FLineDefinition(LOCTEXT("Copyright3", "Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved."), 8, FLinearColor(1.f, 1.f, 1.f), FMargin(0.0f, 2.0f))));
+    AboutLines.Add(MakeShareable(new FLineDefinition(LOCTEXT("Copyright3", "Copyright (C) 2019 Tencent. All rights reserved."), 8, FLinearColor(1.f, 1.f, 1.f), FMargin(0.0f, 2.0f))));
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif

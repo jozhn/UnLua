@@ -1,6 +1,6 @@
 Tencent is pleased to support the open source community by making UnLua available.  
 
-Copyright (C) 2019 THL A29 Limited, a Tencent company.  All rights reserved.
+Copyright (C) 2019 Tencent.  All rights reserved.
 
 UnLua is licensed under the MIT License, including the third-party component listed below. 
 
@@ -9,7 +9,7 @@ A copy of the MIT License is included in this file.
 
 Other dependency and license:
 
-Open Source Software Licensed Under the MIT License: The below software in this distribution may have been modified by THL A29 Limited ("Tencent Modifications"). All Tencent Modifications are Copyright (C) 2019 THL A29 Limited.
+Open Source Software Licensed Under the MIT License: The below software in this distribution may have been modified by Tencent. All Tencent Modifications are Copyright (C) 2019 Tencent.
 --------------------------------------------------------------------
 1. Lua 5.3.4
 Copyright (C) 1994-2019 Lua.org, PUC-Rio.
