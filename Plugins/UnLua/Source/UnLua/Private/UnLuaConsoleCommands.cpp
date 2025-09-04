@@ -58,7 +58,7 @@ namespace UnLua
             return;
         }
 
-        const auto& Format = TEXT(R"(
+        constexpr auto& Format = TEXT(R"(
             local name = "%s"
             package.loaded[name] = nil
             collectgarbage("collect")
