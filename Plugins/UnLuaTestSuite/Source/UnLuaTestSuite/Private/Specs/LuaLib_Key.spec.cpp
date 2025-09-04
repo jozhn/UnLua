@@ -19,7 +19,7 @@
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-BEGIN_DEFINE_SPEC(FUnLuaLibEKeySpec, "UnLua.API.EKeys", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+BEGIN_DEFINE_SPEC(FUnLuaLibEKeySpec, "UnLua.API.EKeys", EAutomationTestFlags::ProductFilter | ApplicationContextMask)
     lua_State* L;
 END_DEFINE_SPEC(FUnLuaLibEKeySpec)
 
@@ -36,7 +36,7 @@ void FUnLuaLibEKeySpec::Define()
         It(TEXT("F1"), EAsyncExecution::TaskGraphMainThread, [this]()
         {
             UnLua::RunChunk(L, "return UE.EKeys.F1.KeyName");
-            TEST_EQUAL(lua_tostring(L, -1), "F1");
+            TEST_EQUAL(FString(lua_tostring(L, -1)), "F1");
         });
     });
 

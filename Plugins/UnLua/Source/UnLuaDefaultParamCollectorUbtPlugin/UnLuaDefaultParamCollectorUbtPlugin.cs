@@ -57,15 +57,21 @@ namespace UnLuaDefaultParamCollectorUbtPlugin
 
         private void Generate()
         {
-            foreach (UhtPackage package in Session.Packages)
+            //foreach (UhtPackage package in Session.Packages)
+            foreach (UhtModule module in Session.Modules)
             {
-                var moduleType = package.Module.ModuleType;
-                ParseModule(package.Module.Name, moduleType, package.Module.OutputDirectory);
-                if (moduleType != UHTModuleType.EngineRuntime && moduleType != UHTModuleType.GameRuntime)
+                // var moduleType = package.Module.ModuleType;
+                // ParseModule(package.Module.Name, moduleType, package.Module.OutputDirectory);
+                foreach (UhtPackage package in module.Packages)
                 {
-                    continue;
+                    var moduleType = package.Module.Module.ModuleType;
+                    ParseModule(package.Module.Module.Name, moduleType, package.Module.Module.OutputDirectory);
+                    if (moduleType != UHTModuleType.EngineRuntime && moduleType != UHTModuleType.GameRuntime)
+                    {
+                        continue;
+                    }
+                    QueueClassExports(package, package);
                 }
-                QueueClassExports(package, package);
             }
             
             // Wait for all the classes to export

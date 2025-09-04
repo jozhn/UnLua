@@ -19,7 +19,7 @@
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-BEGIN_DEFINE_SPEC(FUnLuaLibDataTableSpec, "UnLua.API.DataTable", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+BEGIN_DEFINE_SPEC(FUnLuaLibDataTableSpec, "UnLua.API.DataTable", EAutomationTestFlags::ProductFilter | ApplicationContextMask)
     lua_State* L;
 END_DEFINE_SPEC(FUnLuaLibDataTableSpec)
 
@@ -43,7 +43,7 @@ void FUnLuaLibDataTableSpec::Define()
             return Row.TestString
             )";
             UnLua::RunChunk(L, Chunk);
-            TEST_EQUAL(lua_tostring(L, -1), "A");
+            TEST_EQUAL(FString(lua_tostring(L, -1)), "A");
         });
 
         It(TEXT("获取数据表中指定行的数据（C++）"), EAsyncExecution::TaskGraphMainThread, [this]()
@@ -55,7 +55,7 @@ void FUnLuaLibDataTableSpec::Define()
             return Row.Title
             )";
             UnLua::RunChunk(L, Chunk);
-            TEST_EQUAL(lua_tostring(L, -1), "Hello");
+            TEST_EQUAL(FString(lua_tostring(L, -1)), "Hello");
         });
     });
 

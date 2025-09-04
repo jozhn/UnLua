@@ -19,7 +19,7 @@
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-BEGIN_DEFINE_SPEC(FUnLuaLibFColorSpec, "UnLua.API.FColor", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+BEGIN_DEFINE_SPEC(FUnLuaLibFColorSpec, "UnLua.API.FColor", EAutomationTestFlags::ProductFilter | ApplicationContextMask)
     lua_State* L;
 END_DEFINE_SPEC(FUnLuaLibFColorSpec)
 
@@ -133,7 +133,7 @@ void FUnLuaLibFColorSpec::Define()
         It(TEXT("转为字符串"), EAsyncExecution::TaskGraphMainThread, [this]()
         {
             UnLua::RunChunk(L, "return tostring(UE.FColor(1,2,3,4))");
-            TEST_EQUAL(lua_tostring(L, -1), "(R=1,G=2,B=3,A=4)");
+            TEST_EQUAL(FString(lua_tostring(L, -1)), "(R=1,G=2,B=3,A=4)");
         });
     });
 

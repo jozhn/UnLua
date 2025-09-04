@@ -46,7 +46,7 @@ struct FUnLuaTest_Issue346 : FUnLuaTestBase
         )";
         UnLua::RunChunk(L, Chunk);
         const auto Result = lua_tostring(L, -1);
-        RUNNER_TEST_EQUAL(Result, "blueprint and lua");
+        RUNNER_TEST_EQUAL(FString(Result), "blueprint and lua");
         return true;
     }
 

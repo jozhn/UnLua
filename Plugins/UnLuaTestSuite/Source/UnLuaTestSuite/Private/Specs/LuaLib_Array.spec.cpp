@@ -19,7 +19,7 @@
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-BEGIN_DEFINE_SPEC(FUnLuaLibArraySpec, "UnLua.API.TArray", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+BEGIN_DEFINE_SPEC(FUnLuaLibArraySpec, "UnLua.API.TArray", EAutomationTestFlags::ProductFilter | ApplicationContextMask)
     TSharedPtr<UnLua::FLuaEnv> Env;
     lua_State* L;
 END_DEFINE_SPEC(FUnLuaLibArraySpec)
@@ -665,10 +665,10 @@ void FUnLuaLibArraySpec::Define()
 
             const auto Ret = UnLua::FLuaTable(Env.Get(), -1);
             TEST_EQUAL(Ret.Length(), 4);
-            TEST_EQUAL(Ret[1].Value<int>(), 1)
-            TEST_EQUAL(Ret[2].Value<int>(), 100)
-            TEST_EQUAL(Ret[3].Value<int>(), 2)
-            TEST_EQUAL(Ret[4].Value<int>(), 200)
+            TEST_EQUAL(Ret[1].Value<int>(), 1);
+            TEST_EQUAL(Ret[2].Value<int>(), 100);
+            TEST_EQUAL(Ret[3].Value<int>(), 2);
+            TEST_EQUAL(Ret[4].Value<int>(), 200);
         });
 
         It(TEXT("按引用获取元素（原生）"), EAsyncExecution::TaskGraphMainThread, [this]

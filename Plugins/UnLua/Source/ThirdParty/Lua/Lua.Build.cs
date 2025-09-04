@@ -31,8 +31,19 @@ public class Lua : ModuleRules
     public Lua(ReadOnlyTargetRules Target) : base(Target)
     {
         Type = ModuleType.External;
+#if UE_5_6_OR_LATER
+        CppCompileWarningSettings.UndefinedIdentifierWarningLevel = WarningLevel.Off;
+#elif UE_5_5_OR_LATER
+		UndefinedIdentifierWarningLevel = WarningLevel.Off;
+#else
         bEnableUndefinedIdentifierWarnings = false;
+#endif
+        
+#if UE_5_6_OR_LATER
+        CppCompileWarningSettings.ShadowVariableWarningLevel = WarningLevel.Off;
+#else
         ShadowVariableWarningLevel = WarningLevel.Off;
+#endif
 
         m_LuaVersion = GetLuaVersion();
         m_Config = GetConfigName();

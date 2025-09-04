@@ -22,13 +22,13 @@ struct FIssue517Struct
     GENERATED_BODY()
 
     UPROPERTY()
-    float X;
+    float X = 0.f;
 
     UPROPERTY()
-    float Y;
+    float Y = 0.f;
 
     UPROPERTY()
-    float Z;
+    float Z = 0.f;
 
     UPROPERTY()
     FString Name;

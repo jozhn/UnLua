@@ -22,7 +22,7 @@ struct FHexHandle
     GENERATED_BODY()
     
     UPROPERTY()
-    int32 Value;
+    int32 Value = 0;
 };
 
 UCLASS()

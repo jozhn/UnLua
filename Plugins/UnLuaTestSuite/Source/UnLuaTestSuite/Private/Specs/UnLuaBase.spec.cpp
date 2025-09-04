@@ -19,7 +19,7 @@
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-BEGIN_DEFINE_SPEC(FUnLuaBaseSpec, "UnLua.API.Base", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+BEGIN_DEFINE_SPEC(FUnLuaBaseSpec, "UnLua.API.Base", EAutomationTestFlags::ProductFilter | ApplicationContextMask)
     lua_State* L;
 END_DEFINE_SPEC(FUnLuaBaseSpec)
 
@@ -114,28 +114,28 @@ void FUnLuaBaseSpec::Define()
         {
             UnLua::Push(L, "A");
             TEST_TRUE(UnLua::IsType(L, -1, UnLua::TType<const char*>()));
-            TEST_EQUAL(lua_tostring(L, -1), "A");
+            TEST_EQUAL(FString(lua_tostring(L, -1)), "A");
         });
 
         It(TEXT("正确传入FString到Lua堆栈"), EAsyncExecution::TaskGraphMainThread, [this]()
         {
             UnLua::Push(L, FString("Hello"));
             TEST_TRUE(UnLua::IsType(L, -1, UnLua::TType<FString>()));
-            TEST_EQUAL(lua_tostring(L, -1), "Hello");
+            TEST_EQUAL(FString(lua_tostring(L, -1)), "Hello");
         });
 
         It(TEXT("正确传入中文FString到Lua堆栈"), EAsyncExecution::TaskGraphMainThread, [this]()
         {
             UnLua::Push(L, FString(TEXT("虚幻引擎")));
             TEST_TRUE(UnLua::IsType(L, -1, UnLua::TType<FString>()));
-            TEST_EQUAL(lua_tostring(L, -1), "虚幻引擎");
+            TEST_EQUAL(FString(lua_tostring(L, -1)), "虚幻引擎");
         });
 
         It(TEXT("正确传入FName到Lua堆栈"), EAsyncExecution::TaskGraphMainThread, [this]()
         {
             UnLua::Push(L, FName("Foo"));
             TEST_TRUE(UnLua::IsType(L, -1, UnLua::TType<FName>()));
-            TEST_EQUAL(lua_tostring(L, -1), "Foo");
+            TEST_EQUAL(FString(lua_tostring(L, -1)), "Foo");
         });
 
         It(TEXT("正确传入void*到Lua堆栈"), EAsyncExecution::TaskGraphMainThread, [this]()
@@ -184,7 +184,7 @@ void FUnLuaBaseSpec::Define()
             TEST_TRUE(RetValues.IsValid());
             TEST_EQUAL(RetValues.Num(), 1);
             TEST_EQUAL(RetValues[0].GetType(), LUA_TSTRING);
-            TEST_EQUAL(RetValues[0].Value<const char*>(), "Foo");
+            TEST_EQUAL(FString(RetValues[0].Value<const char*>()), "Foo");
         });
 
         It(TEXT("支持多参数传入和传出"), EAsyncExecution::TaskGraphMainThread, [this]()
@@ -194,7 +194,7 @@ void FUnLuaBaseSpec::Define()
             TEST_TRUE(RetValues.IsValid());
             TEST_EQUAL(RetValues.Num(), 4);
             TEST_EQUAL(RetValues[0].GetType(), LUA_TSTRING);
-            TEST_EQUAL(RetValues[0].Value<const char*>(), "A");
+            TEST_EQUAL(FString(RetValues[0].Value<const char*>()), "A");
             TEST_EQUAL(RetValues[1].GetType(), LUA_TNUMBER);
             TEST_EQUAL(RetValues[1].Value<int32>(), 1);
             TEST_EQUAL(RetValues[2].GetType(), LUA_TBOOLEAN);
@@ -220,7 +220,7 @@ void FUnLuaBaseSpec::Define()
             TEST_TRUE(RetValues.IsValid());
             TEST_EQUAL(RetValues.Num(), 1);
             TEST_EQUAL(RetValues[0].GetType(), LUA_TSTRING);
-            TEST_EQUAL(RetValues[0].Value<const char*>(), "Foo");
+            TEST_EQUAL(FString(RetValues[0].Value<const char*>()), "Foo");
         });
 
         It(TEXT("调用失败，返回值被标记为无效"), EAsyncExecution::TaskGraphMainThread, [this]()
@@ -249,7 +249,7 @@ void FUnLuaBaseSpec::Define()
 
             lua_getglobal(L, "D");
             const auto D = lua_tostring(L, -1);
-            TEST_EQUAL(D, "TestFlag");
+            TEST_EQUAL(FString(D), "TestFlag");
         });
 
 #if UNLUA_LEGACY_RETURN_ORDER
@@ -314,7 +314,7 @@ void FUnLuaBaseSpec::Define()
 
             lua_getglobal(L, "D");
             const auto D = lua_tostring(L, -1);
-            TEST_EQUAL(D, "TestFlag");
+            TEST_EQUAL(FString(D), "TestFlag");
         });
 
 #if UNLUA_LEGACY_RETURN_ORDER

@@ -90,7 +90,7 @@ private:
     TWeakObjectPtr<UFunction> From;
 
     UPROPERTY()
-    UFunction* Overridden;
+    TObjectPtr<UFunction> Overridden;
 
     uint8 bAdded : 1;
     uint8 bActivated : 1;

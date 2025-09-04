@@ -38,7 +38,7 @@ struct FUnLuaTest_Issue322 : FUnLuaTestBase
 			return package.loaded['Tests.Regression.Issue322.测试中文蓝图']\
             ";
         UnLua::RunChunk(L, Chunk);
-        RUNNER_TEST_EQUAL(luaL_typename(L, -1), "table"); // ensure test actor bound to lua
+        RUNNER_TEST_EQUAL(FString(luaL_typename(L, -1)), "table"); // ensure test actor bound to lua
 
         return true;
     }

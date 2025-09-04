@@ -739,7 +739,7 @@ static void PushPropertyArray(lua_State *L, T *Property, void *Value, void(*Push
         {
             lua_pushinteger(L, i + 1);
             PushFunc(L, Property, ElementPtr);
-            ElementPtr += Property->ElementSize;
+            ElementPtr += Property->GetElementSize();
             TPropertyArrayPushPolicy<T, WithMetaTableName>::PostPushSingleElement(L);
         }
         TPropertyArrayPushPolicy<T, WithMetaTableName>::PostPushArray(L);

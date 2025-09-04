@@ -19,7 +19,7 @@
 
 #if WITH_DEV_AUTOMATION_TESTS
 
-BEGIN_DEFINE_SPEC(FUnLuaEnumSpec, "UnLua.API.Enum", EAutomationTestFlags::ProductFilter | EAutomationTestFlags::ApplicationContextMask)
+BEGIN_DEFINE_SPEC(FUnLuaEnumSpec, "UnLua.API.Enum", EAutomationTestFlags::ProductFilter | ApplicationContextMask)
     lua_State* L;
 END_DEFINE_SPEC(FUnLuaEnumSpec)
 
