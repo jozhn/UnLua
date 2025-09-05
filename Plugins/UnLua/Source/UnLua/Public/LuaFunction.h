@@ -89,8 +89,13 @@ public:
 private:
     TWeakObjectPtr<UFunction> From;
 
+// #if UE_VERSION_OLDER_THAN(5, 1, 0)
+//     UPROPERTY()
+//     UFunction* Overridden;
+// #else
     UPROPERTY()
     TObjectPtr<UFunction> Overridden;
+// #endif
 
     uint8 bAdded : 1;
     uint8 bActivated : 1;
