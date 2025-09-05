@@ -795,7 +795,11 @@ public:
             {
                 if (!bCopyValue && Property->HasAnyPropertyFlags(CPF_OutParm))
                 {
+#if UE_VERSION_OLDER_THAN(5, 3, 0)
+                    if (Src->ElementSize < ArrayProperty->Inner->ElementSize)
+#else
                     if (Src->ElementSize < ArrayProperty->Inner->GetElementSize())
+#endif
                     {
                         FScriptArrayHelper Helper(ArrayProperty, ValuePtr);
                         if (Src->Num() > 0)
