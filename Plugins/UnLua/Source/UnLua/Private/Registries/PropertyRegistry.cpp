@@ -384,7 +384,11 @@ namespace UnLua
             };
             const auto StructProperty = new FStructProperty(PropertyCollector, Params);
             StructProperty->Struct = ScriptStruct;
-        	StructProperty->SetElementSize(ScriptStruct->PropertiesSize);
+#if UE_VERSION_OLDER_THAN(5, 3, 0)
+            StructProperty->ElementSize = ScriptStruct->PropertiesSize;
+#else
+            StructProperty->SetElementSize(ScriptStruct->PropertiesSize);
+#endif
             Property = StructProperty;
 #endif
         }
@@ -420,7 +424,11 @@ namespace UnLua
             const auto UnderlyingProperty = new FByteProperty(EnumProperty, TEXT("UnderlyingType"), RF_Transient);
             Property = EnumProperty;
             Property->AddCppProperty(UnderlyingProperty);
-        	Property->SetElementSize(UnderlyingProperty->GetElementSize());
+#if UE_VERSION_OLDER_THAN(5, 3, 0)
+            Property->ElementSize = UnderlyingProperty->ElementSize;
+#else
+            Property->SetElementSize(UnderlyingProperty->GetElementSize());
+#endif
             Property->PropertyFlags |= CPF_IsPlainOldData | CPF_NoDestructor | CPF_ZeroConstructor;
         }
         else
