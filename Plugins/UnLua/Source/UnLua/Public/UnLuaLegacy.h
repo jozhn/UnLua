@@ -1,6 +1,6 @@
 // Tencent is pleased to support the open source community by making UnLua available.
 // 
-// Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+// Copyright (C) 2019 Tencent. All rights reserved.
 //
 // Licensed under the MIT License (the "License"); 
 // you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -831,7 +831,7 @@ namespace UnLua
         virtual bool IsTriviallyDestructible() const override
         {
             static_assert(TIsDestructible<T>::Value, "type must be destructible!");
-            return std::is_trivially_destructible_v<T>;
+            return std::is_trivially_destructible<T>::value;
         }
 
         virtual int32 GetSize() const override { return sizeof(T); }
@@ -853,18 +853,18 @@ namespace UnLua
         virtual void Destruct(void* Dest) const override
         {
             static_assert(TIsDestructible<T>::Value, "type must be destructible!");
-            DestructInternal((T*)Dest, std::conditional_t<std::is_trivially_destructible_v<T>, FTrue, FFalse>());
+            DestructInternal((T*)Dest, typename std::conditional<std::is_trivially_destructible<T>::value, FTrue, FFalse>::type());
         }
 
         virtual void Copy(void* Dest, const void* Src) const override
         {
             static_assert(TIsCopyConstructible<T>::Value, "type must be copy constructible!");
-            CopyInternal((T*)Dest, (const T*)Src, std::conditional_t<TIsTriviallyCopyConstructible<T>::Value, FTrue, FFalse>());
+            CopyInternal((T*)Dest, (const T*)Src, typename std::conditional<std::is_trivially_copy_constructible<T>::value, FTrue, FFalse>::type());
         }
 
         virtual bool Identical(const void* A, const void* B) const override
         {
-            return IdenticalInternal((const T*)A, (const T*)B, std::conditional_t<THasEqualityOperator<T>::Value, FTrue, FFalse>());
+            return IdenticalInternal((const T*)A, (const T*)B, typename std::conditional<THasEqualityOperator<T>::Value, FTrue, FFalse>::type());
         }
 
         virtual FString GetName() const override { return FString(TType<typename TDecay<T>::Type>::GetName()); }
@@ -890,7 +890,7 @@ namespace UnLua
         {
             static_assert(TIsCopyConstructible<T>::Value, "type must be copy constructible!");
             T V = UnLua::Get(L, IndexInStack, TType<T>());
-            CopyInternal((T*)ValuePtr, &V, std::conditional_t<TIsTriviallyCopyConstructible<T>::Value, FTrue, FFalse>());
+            CopyInternal((T*)ValuePtr, &V, typename std::conditional<std::is_trivially_copy_constructible<T>::value, FTrue, FFalse>::type());
             return false;
         }
 

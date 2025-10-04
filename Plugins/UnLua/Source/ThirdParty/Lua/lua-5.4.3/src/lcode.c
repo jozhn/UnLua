@@ -571,7 +571,7 @@ static int addk (FuncState *fs, TValue *key, TValue *v) {
 /*
 ** Add a string to list of constants and return its index.
 */
-static int stringK (FuncState *fs, TString *s) {
+static int stringK (FuncState *fs, LuaTString *s) {
   TValue o;
   setsvalue(fs->ls->L, &o, s);
   return addk(fs, &o, &o);  /* use string itself as key */

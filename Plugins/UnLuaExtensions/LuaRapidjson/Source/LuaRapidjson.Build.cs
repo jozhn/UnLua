@@ -1,6 +1,6 @@
 // Tencent is pleased to support the open source community by making UnLua available.
 // 
-// Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+// Copyright (C) 2019 Tencent. All rights reserved.
 //
 // Licensed under the MIT License (the "License"); 
 // you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -27,13 +27,7 @@ public class LuaRapidjson : ModuleRules
 #endif
         bUseUnity = false;
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-#if UE_5_6_OR_LATER
-        CppCompileWarningSettings.UndefinedIdentifierWarningLevel = WarningLevel.Off;
-#elif UE_5_5_OR_LATER
-		UndefinedIdentifierWarningLevel = WarningLevel.Off;
-#else
-        bEnableUndefinedIdentifierWarnings = false;
-#endif
+        UndefinedIdentifierWarningLevel = WarningLevel.Off;
         bEnableExceptions = true;
 
         PublicDependencyModuleNames.AddRange(

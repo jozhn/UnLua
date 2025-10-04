@@ -1,6 +1,6 @@
 // Tencent is pleased to support the open source community by making UnLua available.
 // 
-// Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+// Copyright (C) 2019 Tencent. All rights reserved.
 //
 // Licensed under the MIT License (the "License"); 
 // you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -23,6 +23,13 @@
 #include "ReflectionUtils/FieldDesc.h"
 #include "ReflectionUtils/PropertyDesc.h"
 
+// Protect TString from UE/Lua naming conflict
+#ifdef TString
+#pragma push_macro("TString")
+#undef TString
+#define UNLUA_LUACORE_TSTRING_PUSHED
+#endif
+
 #ifdef __cplusplus
 #if !LUA_COMPILE_AS_CPP
 extern "C" {
@@ -37,6 +44,11 @@ extern "C" {
 #if !LUA_COMPILE_AS_CPP
 }
 #endif
+#endif
+
+#ifdef UNLUA_LUACORE_TSTRING_PUSHED
+#pragma pop_macro("TString")
+#undef UNLUA_LUACORE_TSTRING_PUSHED
 #endif
 
 const FScriptContainerDesc FScriptContainerDesc::Array(sizeof(FLuaArray), "TArray");
@@ -711,7 +723,7 @@ template <typename T, bool WithMetaTableName>
 static void PushPropertyArray(lua_State *L, T *Property, void *Value, void(*PushFunc)(lua_State*, T*, void*), const char *MetatableName = nullptr)
 {
 #if !UE_BUILD_SHIPPING
-    if (!Property || !Value || Property->ArrayDim < 2 || Property->GetElementSize() < 1)
+    if (!Property || !Value || Property->ArrayDim < 2 || Property->ElementSize < 1)
     {
         UNLUA_LOGERROR(L, LogUnLua, Warning, TEXT("%s, Invalid parameters!"), ANSI_TO_TCHAR(__FUNCTION__));
         return;
@@ -739,7 +751,7 @@ static void PushPropertyArray(lua_State *L, T *Property, void *Value, void(*Push
         {
             lua_pushinteger(L, i + 1);
             PushFunc(L, Property, ElementPtr);
-            ElementPtr += Property->GetElementSize();
+            ElementPtr += Property->ElementSize;
             TPropertyArrayPushPolicy<T, WithMetaTableName>::PostPushSingleElement(L);
         }
         TPropertyArrayPushPolicy<T, WithMetaTableName>::PostPushArray(L);

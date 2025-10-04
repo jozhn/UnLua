@@ -1037,7 +1037,7 @@ static int string_query (lua_State *L) {
     return 2;
   }
   else if (s < tb->size) {
-    TString *ts;
+    LuaTString *ts;
     int n = 0;
     for (ts = tb->hash[s]; ts != NULL; ts = ts->u.hnext) {
       setsvalue2s(L, L->top, ts);

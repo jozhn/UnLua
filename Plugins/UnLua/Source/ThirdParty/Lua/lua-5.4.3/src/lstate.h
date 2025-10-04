@@ -148,7 +148,7 @@ struct lua_longjmp;  /* defined in ldo.c */
 
 
 typedef struct stringtable {
-  TString **hash;
+  LuaTString **hash;
   int nuse;  /* number of elements */
   int size;
 } stringtable;
@@ -289,10 +289,10 @@ typedef struct global_State {
   struct lua_State *twups;  /* list of threads with open upvalues */
   lua_CFunction panic;  /* to be called in unprotected errors */
   struct lua_State *mainthread;
-  TString *memerrmsg;  /* message for memory-allocation errors */
-  TString *tmname[TM_N];  /* array with tag-method names */
+  LuaTString *memerrmsg;  /* message for memory-allocation errors */
+  LuaTString *tmname[TM_N];  /* array with tag-method names */
   struct Table *mt[LUA_NUMTAGS];  /* metatables for basic types */
-  TString *strcache[STRCACHE_N][STRCACHE_M];  /* cache for strings in API */
+  LuaTString *strcache[STRCACHE_N][STRCACHE_M];  /* cache for strings in API */
   lua_WarnFunction warnf;  /* warning function */
   void *ud_warn;         /* auxiliary data to 'warnf' */
 } global_State;
@@ -347,7 +347,7 @@ struct lua_State {
 */
 union GCUnion {
   GCObject gc;  /* common header */
-  struct TString ts;
+  struct LuaTString ts;
   struct Udata u;
   union Closure cl;
   struct Table h;

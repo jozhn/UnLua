@@ -107,9 +107,9 @@ static lua_Integer loadInteger (LoadState *S) {
 /*
 ** Load a nullable string into prototype 'p'.
 */
-static TString *loadStringN (LoadState *S, Proto *p) {
+static LuaTString *loadStringN (LoadState *S, Proto *p) {
   lua_State *L = S->L;
-  TString *ts;
+  LuaTString *ts;
   size_t size = loadSize(S);
   if (size == 0)  /* no string? */
     return NULL;
@@ -133,8 +133,8 @@ static TString *loadStringN (LoadState *S, Proto *p) {
 /*
 ** Load a non-nullable string into prototype 'p'.
 */
-static TString *loadString (LoadState *S, Proto *p) {
-  TString *st = loadStringN(S, p);
+static LuaTString *loadString (LoadState *S, Proto *p) {
+  LuaTString *st = loadStringN(S, p);
   if (st == NULL)
     error(S, "bad format for constant string");
   return st;
@@ -149,7 +149,7 @@ static void loadCode (LoadState *S, Proto *f) {
 }
 
 
-static void loadFunction(LoadState *S, Proto *f, TString *psource);
+static void loadFunction(LoadState *S, Proto *f, LuaTString *psource);
 
 
 static void loadConstants (LoadState *S, Proto *f) {
@@ -253,7 +253,7 @@ static void loadDebug (LoadState *S, Proto *f) {
 }
 
 
-static void loadFunction (LoadState *S, Proto *f, TString *psource) {
+static void loadFunction (LoadState *S, Proto *f, LuaTString *psource) {
   f->source = loadStringN(S, f);
   if (f->source == NULL)  /* no source in dump? */
     f->source = psource;  /* reuse parent's source */

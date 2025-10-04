@@ -69,10 +69,10 @@ static void save (LexState *ls, int c) {
 
 void luaX_init (lua_State *L) {
   int i;
-  TString *e = luaS_newliteral(L, LUA_ENV);  /* create env name */
+  LuaTString *e = luaS_newliteral(L, LUA_ENV);  /* create env name */
   luaC_fix(L, obj2gco(e));  /* never collect this name */
   for (i=0; i<NUM_RESERVED; i++) {
-    TString *ts = luaS_new(L, luaX_tokens[i]);
+    LuaTString *ts = luaS_new(L, luaX_tokens[i]);
     luaC_fix(L, obj2gco(ts));  /* reserved words are never collected */
     ts->extra = cast_byte(i+1);  /* reserved word */
   }
@@ -131,9 +131,9 @@ l_noret luaX_syntaxerror (LexState *ls, const char *msg) {
 ** is a TValue readly available. Later, the code generation can change
 ** this value.
 */
-TString *luaX_newstring (LexState *ls, const char *str, size_t l) {
+LuaTString *luaX_newstring (LexState *ls, const char *str, size_t l) {
   lua_State *L = ls->L;
-  TString *ts = luaS_newlstr(L, str, l);  /* create new string */
+  LuaTString *ts = luaS_newlstr(L, str, l);  /* create new string */
   const TValue *o = luaH_getstr(ls->h, ts);
   if (!ttisnil(o))  /* string already present? */
     ts = keystrval(nodefromval(o));  /* get saved copy */
@@ -164,7 +164,7 @@ static void inclinenumber (LexState *ls) {
 }
 
 
-void luaX_setinput (lua_State *L, LexState *ls, ZIO *z, TString *source,
+void luaX_setinput (lua_State *L, LexState *ls, ZIO *z, LuaTString *source,
                     int firstchar) {
   ls->t.token = 0;
   ls->L = L;
@@ -538,7 +538,7 @@ static int llex (LexState *ls, SemInfo *seminfo) {
       }
       default: {
         if (lislalpha(ls->current)) {  /* identifier or reserved word? */
-          TString *ts;
+          LuaTString *ts;
           do {
             save_and_next(ls);
           } while (lislalnum(ls->current));

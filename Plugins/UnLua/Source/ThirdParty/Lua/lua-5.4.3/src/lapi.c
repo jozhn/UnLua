@@ -518,7 +518,7 @@ LUA_API void lua_pushinteger (lua_State *L, lua_Integer n) {
 ** 'memcmp' and 'memcpy'.
 */
 LUA_API const char *lua_pushlstring (lua_State *L, const char *s, size_t len) {
-  TString *ts;
+  LuaTString *ts;
   lua_lock(L);
   ts = (len == 0) ? luaS_new(L, "") : luaS_newlstr(L, s, len);
   setsvalue2s(L, L->top, ts);
@@ -534,7 +534,7 @@ LUA_API const char *lua_pushstring (lua_State *L, const char *s) {
   if (s == NULL)
     setnilvalue(s2v(L->top));
   else {
-    TString *ts;
+    LuaTString *ts;
     ts = luaS_new(L, s);
     setsvalue2s(L, L->top, ts);
     s = getstr(ts);  /* internal copy's address */
@@ -632,7 +632,7 @@ LUA_API int lua_pushthread (lua_State *L) {
 
 static int auxgetstr (lua_State *L, const TValue *t, const char *k) {
   const TValue *slot;
-  TString *str = luaS_new(L, k);
+  LuaTString *str = luaS_new(L, k);
   if (luaV_fastget(L, t, str, slot, luaH_getstr)) {
     setobj2s(L, L->top, slot);
     api_incr_top(L);
@@ -822,7 +822,7 @@ LUA_API int lua_getiuservalue (lua_State *L, int idx, int n) {
 */
 static void auxsetstr (lua_State *L, const TValue *t, const char *k) {
   const TValue *slot;
-  TString *str = luaS_new(L, k);
+  LuaTString *str = luaS_new(L, k);
   api_checknelems(L, 1);
   if (luaV_fastget(L, t, str, slot, luaH_getstr)) {
     luaV_finishfastset(L, t, slot, s2v(L->top - 1));
@@ -1359,7 +1359,7 @@ static const char *aux_upvalue (TValue *fi, int n, TValue **val,
     }
     case LUA_VLCL: {  /* Lua closure */
       LClosure *f = clLvalue(fi);
-      TString *name;
+      LuaTString *name;
       Proto *p = f->p;
       if (!(cast_uint(n) - 1u  < cast_uint(p->sizeupvalues)))
         return NULL;  /* 'n' not in [1, p->sizeupvalues] */

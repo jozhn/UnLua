@@ -31,7 +31,7 @@ typedef enum {
   VK,  /* constant in 'k'; info = index of constant in 'k' */
   VKFLT,  /* floating constant; nval = numerical float value */
   VKINT,  /* integer constant; ival = numerical integer value */
-  VKSTR,  /* string constant; strval = TString address;
+  VKSTR,  /* string constant; strval = LuaTString address;
              (string is fixed by the lexer) */
   VNONRELOC,  /* expression has its value in a fixed register;
                  info = result register */
@@ -70,7 +70,7 @@ typedef struct expdesc {
   union {
     lua_Integer ival;    /* for VKINT */
     lua_Number nval;  /* for VKFLT */
-    TString *strval;  /* for VKSTR */
+    LuaTString *strval;  /* for VKSTR */
     int info;  /* for generic use */
     struct {  /* for indexed variables */
       short idx;  /* index (R or "long" K) */
@@ -99,7 +99,7 @@ typedef union Vardesc {
     lu_byte kind;
     lu_byte ridx;  /* register holding the variable */
     short pidx;  /* index of the variable in the Proto's 'locvars' array */
-    TString *name;  /* variable name */
+    LuaTString *name;  /* variable name */
   } vd;
   TValue k;  /* constant value (if any) */
 } Vardesc;
@@ -108,7 +108,7 @@ typedef union Vardesc {
 
 /* description of pending goto statements and label statements */
 typedef struct Labeldesc {
-  TString *name;  /* label identifier */
+  LuaTString *name;  /* label identifier */
   int pc;  /* position in code */
   int line;  /* line where it appeared */
   lu_byte nactvar;  /* number of active variables in that position */

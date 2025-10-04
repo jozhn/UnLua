@@ -1,6 +1,6 @@
 // Tencent is pleased to support the open source community by making UnLua available.
 // 
-// Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+// Copyright (C) 2019 Tencent. All rights reserved.
 //
 // Licensed under the MIT License (the "License"); 
 // you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -94,7 +94,7 @@ namespace UnLua
     {
         static void Generate(FString &Buffer, int32 Index)
         {
-            FString TypeName = TTypeIntelliSense<std::conditional_t<TIsPointer<T1>::Value, typename TDecay<typename TRemovePointer<T1>::Type>::Type*, typename TDecay<T1>::Type>>::GetName();
+            FString TypeName = TTypeIntelliSense<typename std::conditional<TIsPointer<T1>::Value, typename TDecay<typename TRemovePointer<T1>::Type>::Type*, typename TDecay<T1>::Type>::type>::GetName();
             Buffer += FString::Printf(TEXT("---@param P%d %s %s\r\n"), Index, *TypeName, *TArgumentComment<T1>::Get());
             TArgumentIntelliSense<T2...>::Generate(Buffer, Index + 1);
         }
@@ -123,7 +123,7 @@ namespace UnLua
         }
 
         // return 
-        FString ReturnTypeName = TTypeIntelliSense<std::conditional_t<TIsPointer<RetType>::Value, typename TDecay<typename TRemovePointer<RetType>::Type>::Type*, typename TDecay<RetType>::Type>>::GetName();
+        FString ReturnTypeName = TTypeIntelliSense<typename std::conditional<TIsPointer<RetType>::Value, typename TDecay<typename TRemovePointer<RetType>::Type>::Type*, typename TDecay<RetType>::Type>::type>::GetName();
         if (ReturnTypeName.Len() > 0)
         {
             Buffer += FString::Printf(TEXT("---@return %s\r\n"), *ReturnTypeName);
@@ -402,7 +402,7 @@ namespace UnLua
 
         char MetatableName[256];
         memset(MetatableName, 0, sizeof(MetatableName));
-        FCStringAnsi::Snprintf(MetatableName, sizeof(MetatableName), "%hs%hs", TType<SmartPtrType>::GetName(), TType<ClassType>::GetName());
+        FCStringAnsi::Snprintf(MetatableName, sizeof(MetatableName), "%s%s", TType<SmartPtrType>::GetName(), TType<ClassType>::GetName());
 
         int32 Type = luaL_getmetatable(L, MetatableName);
         lua_pop(L, 1);
@@ -440,7 +440,7 @@ namespace UnLua
         const int Actual = lua_gettop(L); 
         if (Actual < Expected)
         {
-            UE_LOG(LogUnLua, Warning, TEXT("Attempted to call constructor of %hs with invalid arguments. %d expected but got %d."), TType<ClassType>::GetName(), Expected, Actual);
+            UE_LOG(LogUnLua, Warning, TEXT("Attempted to call constructor of %s with invalid arguments. %d expected but got %d."), *TType<ClassType>::GetName(), Expected, Actual);
             return 0;
         }
 
@@ -465,7 +465,7 @@ namespace UnLua
     {
         char MetatableName[256];
         memset(MetatableName, 0, sizeof(MetatableName));
-        FCStringAnsi::Snprintf(MetatableName, sizeof(MetatableName), "%hs%hs", TType<SmartPtrType>::GetName(), TType<ClassType>::GetName());
+        FCStringAnsi::Snprintf(MetatableName, sizeof(MetatableName), "%s%s", TType<SmartPtrType>::GetName(), TType<ClassType>::GetName());
         SmartPtrType SharedPtr = SmartPtrType(new ClassType(Args.template Get<N>()...));
         void *Userdata = UnLua::NewSmartPointer(L, sizeof(SmartPtrType), MetatableName);
         if (Userdata)
@@ -880,7 +880,7 @@ namespace UnLua
     template <bool bIsReflected>
     void TExportedClassBase<bIsReflected>::GenerateIntelliSense(FString &Buffer) const
     {
-        GenerateIntelliSenseInternal(Buffer, std::conditional_t<bIsReflected, FTrue, FFalse>());
+        GenerateIntelliSenseInternal(Buffer, typename std::conditional<bIsReflected, FTrue, FFalse>::type());
     }
 
     template <bool bIsReflected>
@@ -951,7 +951,7 @@ namespace UnLua
     TExportedClass<bIsReflected, ClassType, CtorArgType...>::TExportedClass(const char *InName, const char *InSuperClassName)
         : FExportedClassBase(InName, InSuperClassName)
     {
-        AddDefaultFunctions(std::conditional_t<bIsReflected, FTrue, FFalse>());
+        AddDefaultFunctions(typename std::conditional<bIsReflected, FTrue, FFalse>::type());
     }
 
     template <bool bIsReflected, typename ClassType, typename... CtorArgType>
@@ -1026,23 +1026,19 @@ namespace UnLua
         FExportedClassBase::GlueFunctions.Add(new FGlueFunction(InName, InFunc));
     }
 
-    template <typename Type>
-    struct TUnLuaNot
-    {
-        static constexpr bool Value = !Type::value;
-        static constexpr bool value = !Type::value;
-    };
     template <bool bIsReflected, typename ClassType, typename... CtorArgType>
     void TExportedClass<bIsReflected, ClassType, CtorArgType...>::AddDefaultFunctions(FFalse NotReflected)
     {
-        AddConstructor(std::conditional_t<TIsConstructible<ClassType, CtorArgType...>::Value, FTrue, FFalse>());
-        AddDestructor(std::conditional_t<TAnd<TIsDestructible<ClassType>, TUnLuaNot<std::is_trivially_destructible<ClassType>>>::Value, FFalse, FTrue>());
+        AddConstructor(typename std::conditional<TIsConstructible<ClassType, CtorArgType...>::Value, FTrue, FFalse>::type());
+        // Use std::conditional directly instead of TNot which expects ::Value (uppercase)
+        constexpr bool bNeedDestructor = TIsDestructible<ClassType>::Value && !std::is_trivially_destructible<ClassType>::value;
+        AddDestructor(typename std::conditional<bNeedDestructor, FFalse, FTrue>::type());
     }
 
     template <bool bIsReflected, typename ClassType, typename... CtorArgType>
     void TExportedClass<bIsReflected, ClassType, CtorArgType...>::AddDefaultFunctions(FTrue Reflected)
     {
-        AddDefaultFunctions_Reflected(std::conditional_t<TPointerIsConvertibleFromTo<ClassType, UObject>::Value, FTrue, FFalse>());
+        AddDefaultFunctions_Reflected(typename std::conditional<TPointerIsConvertibleFromTo<ClassType, UObject>::Value, FTrue, FFalse>::type());
     }
 
     template <bool bIsReflected, typename ClassType, typename... CtorArgType>
@@ -1051,7 +1047,7 @@ namespace UnLua
         int32 NumArgs = sizeof...(CtorArgType);
         if (NumArgs > 0)
         {
-            AddConstructor(typename std::conditional_t<TIsConstructible<ClassType, CtorArgType...>::Value, FTrue, FFalse>());
+            AddConstructor(typename std::conditional<TIsConstructible<ClassType, CtorArgType...>::Value, FTrue, FFalse>::type());
         }
     }
 

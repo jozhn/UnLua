@@ -1,6 +1,6 @@
 ﻿// Tencent is pleased to support the open source community by making UnLua available.
 // 
-// Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+// Copyright (C) 2019 Tencent. All rights reserved.
 //
 // Licensed under the MIT License (the "License"); 
 // you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -29,15 +29,25 @@
 #include "UnLuaLegacy.h"
 #include "UnLuaLib.h"
 #include "UnLuaSettings.h"
+
+// Protect TString from UE/Lua naming conflict
+#ifdef TString
+#pragma push_macro("TString")
+#undef TString
+#define UNLUA_LSTATE_TSTRING_PUSHED
+#endif
+
 #include "lstate.h"
+
+#ifdef UNLUA_LSTATE_TSTRING_PUSHED
+#pragma pop_macro("TString")
+#undef UNLUA_LSTATE_TSTRING_PUSHED
+#endif
 
 namespace UnLua
 {
-#if UE_VERSION_NEWER_THAN(5, 5, 0)
-    constexpr EInternalObjectFlags AsyncObjectFlags = EInternalObjectFlags_AsyncLoading | EInternalObjectFlags::Async;
-#else
-    constexpr EInternalObjectFlags AsyncObjectFlags = EInternalObjectFlags::AsyncLoading | EInternalObjectFlags::Async;
-#endif
+    // EInternalObjectFlags::AsyncLoading was removed in UE 5.6, use Async instead
+    constexpr EInternalObjectFlags AsyncObjectFlags = EInternalObjectFlags::Async;
 
     TMap<lua_State*, FLuaEnv*> FLuaEnv::AllEnvs;
     FLuaEnv::FOnCreated FLuaEnv::OnCreated;

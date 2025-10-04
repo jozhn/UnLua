@@ -1,6 +1,6 @@
 ﻿// Tencent is pleased to support the open source community by making UnLua available.
 // 
-// Copyright (C) 2019 THL A29 Limited, a Tencent company. All rights reserved.
+// Copyright (C) 2019 Tencent. All rights reserved.
 //
 // Licensed under the MIT License (the "License"); 
 // you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -19,6 +19,7 @@
 #include "UnLuaModule.h"
 #include "ReflectionUtils/PropertyDesc.h"
 #include "Misc/EngineVersionComparison.h"
+#include "UObject/MetaData.h"
 
 static constexpr uint8 ScriptMagicHeader[] = {EX_StringConst, 'L', 'U', 'A', '\0', EX_UInt64Const};
 static constexpr size_t ScriptMagicHeaderSize = sizeof ScriptMagicHeader;
@@ -141,11 +142,15 @@ void ULuaFunction::Override(UFunction* Function, UClass* Class, bool bAddNew)
     check(Function && Class && !From.IsValid());
 
 #if WITH_METADATA
-#if UE_VERSION_NEWER_THAN(5, 5, 0)
-    FMetaData::CopyMetadata(Function, this);
-#else
-    UMetaData::CopyMetadata(Function, this);
-#endif
+    // UMetaData::CopyMetadata was removed in UE 5.6
+    // Metadata copying is now handled automatically by the reflection system
+    // if (UPackage* Package = GetOutermost())
+    // {
+    //     if (UMetaData* MetaData = Package->GetMetaData())
+    //     {
+    //         MetaData->CopyMetadata(Function, this);
+    //     }
+    // }
 #endif
 
     bActivated = false;

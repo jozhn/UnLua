@@ -175,7 +175,7 @@ LUA_API int lua_getstack (lua_State *L, int level, lua_Debug *ar) {
 
 
 static const char *upvalname (const Proto *p, int uv) {
-  TString *s = check_exp(uv < p->sizeupvalues, p->upvalues[uv].name);
+  LuaTString *s = check_exp(uv < p->sizeupvalues, p->upvalues[uv].name);
   if (s == NULL) return "?";
   else return getstr(s);
 }
@@ -750,7 +750,7 @@ l_noret luaG_ordererror (lua_State *L, const TValue *p1, const TValue *p2) {
 
 
 /* add src:line information to 'msg' */
-const char *luaG_addinfo (lua_State *L, const char *msg, TString *src,
+const char *luaG_addinfo (lua_State *L, const char *msg, LuaTString *src,
                                         int line) {
   char buff[LUA_IDSIZE];
   if (src)

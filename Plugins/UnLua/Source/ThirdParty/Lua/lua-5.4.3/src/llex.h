@@ -49,7 +49,7 @@ enum RESERVED {
 typedef union {
   lua_Number r;
   lua_Integer i;
-  TString *ts;
+  LuaTString *ts;
 } SemInfo;  /* semantics information */
 
 
@@ -73,15 +73,15 @@ typedef struct LexState {
   Mbuffer *buff;  /* buffer for tokens */
   Table *h;  /* to avoid collection/reuse strings */
   struct Dyndata *dyd;  /* dynamic structures used by the parser */
-  TString *source;  /* current source name */
-  TString *envn;  /* environment variable name */
+  LuaTString *source;  /* current source name */
+  LuaTString *envn;  /* environment variable name */
 } LexState;
 
 
 LUAI_FUNC void luaX_init (lua_State *L);
 LUAI_FUNC void luaX_setinput (lua_State *L, LexState *ls, ZIO *z,
-                              TString *source, int firstchar);
-LUAI_FUNC TString *luaX_newstring (LexState *ls, const char *str, size_t l);
+                              LuaTString *source, int firstchar);
+LUAI_FUNC LuaTString *luaX_newstring (LexState *ls, const char *str, size_t l);
 LUAI_FUNC void luaX_next (LexState *ls);
 LUAI_FUNC int luaX_lookahead (LexState *ls);
 LUAI_FUNC l_noret luaX_syntaxerror (LexState *ls, const char *s);

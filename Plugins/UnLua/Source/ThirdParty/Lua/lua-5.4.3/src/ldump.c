@@ -85,7 +85,7 @@ static void dumpInteger (DumpState *D, lua_Integer x) {
 }
 
 
-static void dumpString (DumpState *D, const TString *s) {
+static void dumpString (DumpState *D, const LuaTString *s) {
   if (s == NULL)
     dumpSize(D, 0);
   else {
@@ -103,7 +103,7 @@ static void dumpCode (DumpState *D, const Proto *f) {
 }
 
 
-static void dumpFunction(DumpState *D, const Proto *f, TString *psource);
+static void dumpFunction(DumpState *D, const Proto *f, LuaTString *psource);
 
 static void dumpConstants (DumpState *D, const Proto *f) {
   int i;
@@ -176,7 +176,7 @@ static void dumpDebug (DumpState *D, const Proto *f) {
 }
 
 
-static void dumpFunction (DumpState *D, const Proto *f, TString *psource) {
+static void dumpFunction (DumpState *D, const Proto *f, LuaTString *psource) {
   if (D->strip || f->source == psource)
     dumpString(D, NULL);  /* no debug info or same source as its parent */
   else
